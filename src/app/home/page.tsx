@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import TransactionForm from "@/src/components/TransactionForm";
 import { SubmitButton, Modal, NotificationSnackbar } from "../../components/UI";
 import { useState } from "react";
@@ -10,7 +10,7 @@ export default function Home() {
 
   const handleOpenModal = () => setOpenModal(true);
   const handleCloseModal = () => setOpenModal(false);
-  const handleSnackbar = (type: 'success' | 'error') => {
+  const handleSnackbar = (type: "success" | "error") => {
     if (!openSnackbar) {
       setOpenSnackbar(type);
     }
@@ -19,13 +19,13 @@ export default function Home() {
   return (
     <div>
       <h1>収支一覧</h1>
-      <br/>
-      <SubmitButton
-        label="収支登録"
-        onClick={handleOpenModal}
-      />
+      <br />
+      <SubmitButton label="収支登録" onClick={handleOpenModal} />
       <Modal open={openModal} onClose={handleCloseModal} title="収支登録">
-        <TransactionForm onClose={handleCloseModal} onNotify={(type: 'success' | 'error') => handleSnackbar(type)} />
+        <TransactionForm
+          onClose={handleCloseModal}
+          onNotify={(type: "success" | "error") => handleSnackbar(type)}
+        />
       </Modal>
       <NotificationSnackbar notify={openSnackbar} />
     </div>

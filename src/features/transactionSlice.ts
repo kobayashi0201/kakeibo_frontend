@@ -1,5 +1,5 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { createTransaction } from '@/src/utils/api';
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createTransaction } from "@/src/utils/api";
 
 interface Transaction {
   id: number;
@@ -12,40 +12,40 @@ interface Transaction {
 
 interface TransactionState {
   transactions: Transaction[];
-  status: 'idle' | 'loading' | 'succeeded' | 'failed';
+  status: "idle" | "loading" | "succeeded" | "failed";
   error: string | null;
 }
 
 const initialState: TransactionState = {
   transactions: [],
-  status: 'idle',
+  status: "idle",
   error: null,
 };
 
 const transactionSlice = createSlice({
-  name: 'transactions',
+  name: "transactions",
   initialState,
   reducers: {
     deleteTransaction(state, action: PayloadAction<number>) {
       state.transactions = state.transactions.filter(
-        (transaction) => transaction.id !== action.payload
+        (transaction) => transaction.id !== action.payload,
       );
     },
   },
   extraReducers: (builder) => {
     builder
       .addCase(createTransaction.pending, (state) => {
-        state.status = 'loading';
+        state.status = "loading";
       })
       .addCase(createTransaction.fulfilled, (state, action) => {
-        state.status = 'succeeded';
+        state.status = "succeeded";
         state.transactions.push(action.payload);
       })
       .addCase(createTransaction.rejected, (state, action) => {
-        state.status = 'failed';
+        state.status = "failed";
         state.error = action.payload as string;
       });
-  }
+  },
 });
 
 export const { deleteTransaction } = transactionSlice.actions;

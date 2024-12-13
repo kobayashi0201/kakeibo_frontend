@@ -1,29 +1,42 @@
-'use client'
+"use client";
 
-import { ThemeProvider, CssBaseline } from '@mui/material';
-import { createTheme } from '@mui/material/styles';
-import { useEffect } from 'react';
+import { ThemeProvider, CssBaseline } from "@mui/material";
+import { createTheme } from "@mui/material/styles";
+import { useEffect } from "react";
 
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#1976d2',
+      main: "#1976d2",
     },
     secondary: {
-      main: '#dc004e',
+      main: "#dc004e",
     },
   },
   typography: {
-    fontFamily: '"GeistSans", sans-serif',
+    fontFamily: "GeistSans, sans-serif",
   },
 });
 
-export default function ThemeProviderWrapper({ children }: { children: React.ReactNode }) {
+export default function ThemeProviderWrapper({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   useEffect(() => {
-    document.documentElement.style.setProperty('--primary-color', theme.palette.primary.main);
-    document.documentElement.style.setProperty('--secondary-color', theme.palette.secondary.main);
-    document.documentElement.style.setProperty('--error-color', theme.palette.error.main);
-    document.documentElement.style.setProperty('--toast-bg', '#ffffff');
+    document.documentElement.style.setProperty(
+      "--primary-color",
+      theme.palette.primary.main,
+    );
+    document.documentElement.style.setProperty(
+      "--secondary-color",
+      theme.palette.secondary.main,
+    );
+    document.documentElement.style.setProperty(
+      "--error-color",
+      theme.palette.error.main,
+    );
+    document.documentElement.style.setProperty("--toast-bg", "#ffffff");
   }, []);
 
   return (

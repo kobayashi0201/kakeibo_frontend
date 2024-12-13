@@ -1,17 +1,17 @@
-"use client"
+"use client";
 
-import React from 'react';
+import React from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useForm, Controller } from "react-hook-form";
-import { useDispatch } from 'react-redux';
-import { AppDispatch } from '../features/store';
-import { createTransaction } from '../utils/api';
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../features/store";
+import { createTransaction } from "../utils/api";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { submitSchema } from '../validations/validationSchemas';
-import { formatDate } from '../utils/dateUtils';
-import { SubmitButton, InputField, MultipleLineInputField } from './UI';
-import styles from './TransactionForm.module.css';
+import { submitSchema } from "../validations/validationSchemas";
+import { formatDate } from "../utils/dateUtils";
+import { SubmitButton, InputField, MultipleLineInputField } from "./UI";
+import styles from "./TransactionForm.module.css";
 
 type FormValues = {
   date: Date;
@@ -21,36 +21,46 @@ type FormValues = {
 
 type TransactionFormProps = {
   onClose: () => void;
-  onNotify: (type: 'success' | 'error') => void;
+  onNotify: (type: "success" | "error") => void;
 };
 
-const TransactionForm: React.FC<TransactionFormProps> = ({ onClose, onNotify }) => {
+const TransactionForm: React.FC<TransactionFormProps> = ({
+  onClose,
+  onNotify,
+}) => {
   const dispatch = useDispatch<AppDispatch>();
 
-  const { handleSubmit, reset, control, formState: { errors } } = useForm<FormValues>({
-    resolver: yupResolver(submitSchema), 
+  const {
+    handleSubmit,
+    reset,
+    control,
+    formState: { errors },
+  } = useForm<FormValues>({
+    resolver: yupResolver(submitSchema),
     defaultValues: {
       date: new Date(),
       amount: 0,
-      description: '',
+      description: "",
     },
   });
 
   const onSubmit = async (data: FormValues) => {
     try {
-      await dispatch(createTransaction({
-        amount: data.amount, 
-        date: formatDate(data.date),
-        description: data.description, 
-        userId: 1, 
-        categoryId: 1
-      }));
+      await dispatch(
+        createTransaction({
+          amount: data.amount,
+          date: formatDate(data.date),
+          description: data.description,
+          userId: 1,
+          categoryId: 1,
+        }),
+      );
       reset();
-      onNotify('success');
+      onNotify("success");
       onClose();
     } catch {
       reset();
-      onNotify('error');
+      onNotify("error");
       onClose();
     }
   };
@@ -64,12 +74,14 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ onClose, onNotify }) 
           render={({ field }) => (
             <InputField
               {...field}
-              label='金額'
-              placeholder='金額を入力してください'
+              label="金額"
+              placeholder="金額を入力してください"
             />
           )}
         />
-        {errors.amount && <p style={{ color: "red" }}>{errors.amount.message}</p>}
+        {errors.amount && (
+          <p style={{ color: "red" }}>{errors.amount.message}</p>
+        )}
         <Controller
           name="date"
           control={control}
@@ -78,12 +90,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ onClose, onNotify }) 
               selected={field.value}
               onChange={field.onChange}
               placeholderText="日付を選択してください"
-              customInput={
-                <InputField
-                  label='日付' 
-                  placeholder=''
-                />
-              }
+              customInput={<InputField label="日付" placeholder="" />}
             />
           )}
         />
@@ -93,20 +100,19 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ onClose, onNotify }) 
           control={control}
           render={({ field }) => (
             <MultipleLineInputField
-              { ...field }
-              label='内容'
-              placeholder='内容を入力してください'
+              {...field}
+              label="内容"
+              placeholder="内容を入力してください"
               rows={3}
             />
           )}
         />
-        {errors.description && <p style={{ color: "red" }}>{errors.description.message}</p>}
+        {errors.description && (
+          <p style={{ color: "red" }}>{errors.description.message}</p>
+        )}
       </div>
       <div className={styles.submitButton}>
-        <SubmitButton
-          label='登録'
-          type='submit'
-        />
+        <SubmitButton label="登録" type="submit" />
       </div>
     </form>
   );
