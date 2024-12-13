@@ -1,0 +1,11 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: .75rem;
+  margin-top: 1.5rem;
+}
+.submitButton {
+  display: flex;
+  flex-direction: column;
+  margin: 1.5rem 0rem;
+}
