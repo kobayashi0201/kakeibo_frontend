@@ -55,7 +55,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
           description: data.description,
           userId: 73,
           categoryId: 37,
-        })
+        }),
       );
       await dispatch(fetchTransactions());
       reset();

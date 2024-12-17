@@ -3,7 +3,7 @@ import TransactionForm from "@/src/components/TransactionForm";
 import { SubmitButton, Modal, NotificationSnackbar } from "../../components/UI";
 import { useState, useEffect } from "react";
 import "react-toastify/dist/ReactToastify.css";
-import { TableList } from "../../components/UI";
+import TransactionTableList from "@/src/components/TableList";
 import { fetchTransactions } from "@/src/utils/api";
 import { Transaction } from "@/src/types/types";
 import { useDispatch } from "react-redux";
@@ -29,12 +29,12 @@ export default function Home() {
       const data = await dispatch(fetchTransactions());
       setTransactions(data.payload);
     };
-    fetch();  
-  }, [isSubmitted]);
+    fetch();
+  }, [isSubmitted, dispatch]);
 
   return (
     <div>
-      <TableList label={['日付', '金額（円）', '内容']} data={transactions}/>
+      <TransactionTableList data={transactions} />
       <br />
       <SubmitButton label="収支登録" onClick={handleOpenModal} />
       <Modal open={openModal} onClose={handleCloseModal} title="収支登録">
