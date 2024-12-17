@@ -9,6 +9,21 @@ const apiClient = axios.create({
   },
 });
 
+export const fetchTransactions = createAsyncThunk(
+  "transactions/fetchTransactions",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await apiClient.get("/transactions");
+      return response.data;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        return rejectWithValue(error.response?.data?.message);
+      }
+      return rejectWithValue("An unexpected error occurred");
+    }
+  },
+);
+
 export const createTransaction = createAsyncThunk(
   "transactions/createTransaction",
   async (
