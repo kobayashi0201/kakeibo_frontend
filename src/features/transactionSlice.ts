@@ -1,20 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { createTransaction } from "@/src/utils/api";
-
-interface Transaction {
-  id: number;
-  amount: number;
-  date: Date | null;
-  description: string | null;
-  userId: number;
-  categoryId: number;
-}
-
-interface TransactionState {
-  transactions: Transaction[];
-  status: "idle" | "loading" | "succeeded" | "failed";
-  error: string | null;
-}
+import { fetchTransactions, createTransaction } from "@/src/utils/api";
+import { TransactionState } from "@/src/types/types";
 
 const initialState: TransactionState = {
   transactions: [],
@@ -34,6 +20,17 @@ const transactionSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      .addCase(fetchTransactions.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(fetchTransactions.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.transactions = action.payload;
+      })
+      .addCase(fetchTransactions.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload as string;
+      })
       .addCase(createTransaction.pending, (state) => {
         state.status = "loading";
       })

@@ -6,7 +6,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { useForm, Controller } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../features/store";
-import { createTransaction } from "../utils/api";
+import { fetchTransactions, createTransaction } from "../utils/api";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { submitSchema } from "../validations/validationSchemas";
 import { formatDate } from "../utils/dateUtils";
@@ -22,11 +22,13 @@ type FormValues = {
 type TransactionFormProps = {
   onClose: () => void;
   onNotify: (type: "success" | "error") => void;
+  onSubmitSuccess: () => void;
 };
 
 const TransactionForm: React.FC<TransactionFormProps> = ({
   onClose,
   onNotify,
+  onSubmitSuccess,
 }) => {
   const dispatch = useDispatch<AppDispatch>();
 
@@ -51,11 +53,13 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
           amount: data.amount,
           date: formatDate(data.date),
           description: data.description,
-          userId: 1,
-          categoryId: 1,
-        }),
+          userId: 73,
+          categoryId: 37,
+        })
       );
+      await dispatch(fetchTransactions());
       reset();
+      onSubmitSuccess();
       onNotify("success");
       onClose();
     } catch {
