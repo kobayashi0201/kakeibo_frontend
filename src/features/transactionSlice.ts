@@ -1,5 +1,10 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { fetchTransactions, createTransaction } from "@/src/utils/api";
+import { createSlice } from "@reduxjs/toolkit";
+import {
+  fetchTransactions,
+  createTransaction,
+  destoryTransaction,
+  destoryMultipleTransactions,
+} from "@/src/utils/api";
 import { TransactionState } from "@/src/types/types";
 
 const initialState: TransactionState = {
@@ -11,13 +16,7 @@ const initialState: TransactionState = {
 const transactionSlice = createSlice({
   name: "transactions",
   initialState,
-  reducers: {
-    deleteTransaction(state, action: PayloadAction<number>) {
-      state.transactions = state.transactions.filter(
-        (transaction) => transaction.id !== action.payload,
-      );
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(fetchTransactions.pending, (state) => {
@@ -31,9 +30,6 @@ const transactionSlice = createSlice({
         state.status = "failed";
         state.error = action.payload as string;
       })
-      .addCase(createTransaction.pending, (state) => {
-        state.status = "loading";
-      })
       .addCase(createTransaction.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.transactions.push(action.payload);
@@ -41,9 +37,28 @@ const transactionSlice = createSlice({
       .addCase(createTransaction.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload as string;
+      })
+      .addCase(destoryTransaction.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.transactions = state.transactions.filter(
+          (transaction) => transaction.id !== action.payload,
+        );
+      })
+      .addCase(destoryTransaction.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload as string;
+      })
+      .addCase(destoryMultipleTransactions.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.transactions = state.transactions.filter(
+          (transaction) => transaction.id !== action.payload,
+        );
+      })
+      .addCase(destoryMultipleTransactions.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload as string;
       });
   },
 });
 
-export const { deleteTransaction } = transactionSlice.actions;
 export default transactionSlice.reducer;

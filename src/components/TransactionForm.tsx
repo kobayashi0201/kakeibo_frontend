@@ -21,7 +21,7 @@ type FormValues = {
 
 type TransactionFormProps = {
   onClose: () => void;
-  onNotify: (type: "success" | "error") => void;
+  onNotify: (type: "success" | "error", action: "register" | "delete") => void;
   onSubmitSuccess: () => void;
 };
 
@@ -60,11 +60,11 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
       await dispatch(fetchTransactions());
       reset();
       onSubmitSuccess();
-      onNotify("success");
+      onNotify("success", "register");
       onClose();
     } catch {
       reset();
-      onNotify("error");
+      onNotify("error", "register");
       onClose();
     }
   };

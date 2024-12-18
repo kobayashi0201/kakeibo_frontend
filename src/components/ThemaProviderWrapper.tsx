@@ -36,7 +36,6 @@ export default function ThemeProviderWrapper({
       "--error-color",
       theme.palette.error.main,
     );
-    document.documentElement.style.setProperty("--toast-bg", "#ffffff");
   }, []);
 
   return (
