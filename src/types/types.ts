@@ -5,6 +5,7 @@ export interface Transaction {
   description: string | null;
   userId: number;
   categoryId: number;
+  transaction_type: string;
 }
 
 export interface TransactionState {
