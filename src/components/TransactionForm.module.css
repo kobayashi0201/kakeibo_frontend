@@ -1,8 +1,13 @@
+.transactionTypeForm {
+  margin-top: 0.75rem;
+  margin-bottom: 0.75rem;
+  height: 2.5rem;
+  width: 5.5rem
+}
 .form {
   display: flex;
   flex-direction: column;
   gap: .75rem;
-  margin-top: 1.5rem;
 }
 .submitButton {
   display: flex;

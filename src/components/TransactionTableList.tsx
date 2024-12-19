@@ -32,6 +32,7 @@ interface RowData {
   date: string;
   amount: number;
   description: string | null;
+  transaction_type: string;
 }
 
 interface EnhancedTableToolbarProps {
@@ -170,6 +171,7 @@ const TransactionTableList: React.FC<CustomTableProps> = ({
     date: formatDate(transaction.date),
     amount: transaction.amount,
     description: transaction.description,
+    transaction_type: transaction.transaction_type,
   }));
 
   const sortedData = sortedRowInformation(
@@ -234,6 +236,7 @@ const TransactionTableList: React.FC<CustomTableProps> = ({
                 </TableSortLabel>
               </TableCell>
               <TableCell style={{ fontWeight: "bold" }}>内容</TableCell>
+              <TableCell style={{ fontWeight: "bold" }}>収入/支出</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -256,6 +259,9 @@ const TransactionTableList: React.FC<CustomTableProps> = ({
                   <TableCell>{row.date}</TableCell>
                   <TableCell>{row.amount}</TableCell>
                   <TableCell>{row.description}</TableCell>
+                  <TableCell>
+                    {row.transaction_type === "expense" ? "支出" : "収入"}
+                  </TableCell>
                 </TableRow>
               );
             })}

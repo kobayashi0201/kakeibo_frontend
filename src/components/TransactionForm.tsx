@@ -12,11 +12,13 @@ import { submitSchema } from "../validations/validationSchemas";
 import { formatDate } from "../utils/dateUtils";
 import { SubmitButton, InputField, MultipleLineInputField } from "./UI";
 import styles from "./TransactionForm.module.css";
+import { MenuItem, Select } from "@mui/material";
 
 type FormValues = {
   date: Date;
   amount: number;
   description?: string;
+  transaction_type: string;
 };
 
 type TransactionFormProps = {
@@ -43,6 +45,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
       date: new Date(),
       amount: 0,
       description: "",
+      transaction_type: "expense",
     },
   });
 
@@ -53,8 +56,9 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
           amount: data.amount,
           date: formatDate(data.date),
           description: data.description,
-          userId: 73,
-          categoryId: 37,
+          userId: 1,
+          categoryId: 1,
+          transaction_type: data.transaction_type,
         }),
       );
       await dispatch(fetchTransactions());
@@ -71,6 +75,25 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
+      <div>
+        <Controller
+          name="transaction_type"
+          control={control}
+          render={({ field }) => (
+            <Select
+              labelId="transaction-type-label"
+              className={styles.transactionTypeForm}
+              {...field}
+            >
+              <MenuItem value="expense">支出</MenuItem>
+              <MenuItem value="income">収入</MenuItem>
+            </Select>
+          )}
+        />
+        {errors.transaction_type && (
+          <p style={{ color: "red" }}>{errors.transaction_type.message}</p>
+        )}
+      </div>
       <div className={styles.form}>
         <Controller
           name="amount"
@@ -95,6 +118,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
               onChange={field.onChange}
               placeholderText="日付を選択してください"
               customInput={<InputField label="日付" placeholder="" />}
+              className={styles.form}
             />
           )}
         />

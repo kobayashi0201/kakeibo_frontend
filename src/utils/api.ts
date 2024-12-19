@@ -33,6 +33,7 @@ export const createTransaction = createAsyncThunk(
       description: string | undefined;
       userId: number;
       categoryId: number;
+      transaction_type: string;
     },
     { rejectWithValue },
   ) => {
