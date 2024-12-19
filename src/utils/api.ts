@@ -50,3 +50,38 @@ export const createTransaction = createAsyncThunk(
     }
   },
 );
+
+export const destoryTransaction = createAsyncThunk(
+  "transactions/destroyTransactions",
+  async (id: number, { rejectWithValue }) => {
+    try {
+      const response = await apiClient.delete(`/transactions/${id}`);
+      return response.data;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        return rejectWithValue(error.response?.data?.message);
+      }
+      return rejectWithValue("An unexpected error occurred");
+    }
+  },
+);
+
+export const destoryMultipleTransactions = createAsyncThunk(
+  "transactions/destroyMultipleTransactions",
+  async (ids: number[], { rejectWithValue }) => {
+    try {
+      const response = await apiClient.delete(
+        "/transactions/destroy_multiple",
+        {
+          data: { ids },
+        },
+      );
+      return response.data;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        return rejectWithValue(error.response?.data?.message);
+      }
+      return rejectWithValue("An unexpected error occurred");
+    }
+  },
+);
