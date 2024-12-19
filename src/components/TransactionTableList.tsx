@@ -259,7 +259,9 @@ const TransactionTableList: React.FC<CustomTableProps> = ({
                   <TableCell>{row.date}</TableCell>
                   <TableCell>{row.amount}</TableCell>
                   <TableCell>{row.description}</TableCell>
-                  <TableCell>{row.transaction_type === 'expense' ? '支出' : '収入'}</TableCell>
+                  <TableCell>
+                    {row.transaction_type === "expense" ? "支出" : "収入"}
+                  </TableCell>
                 </TableRow>
               );
             })}

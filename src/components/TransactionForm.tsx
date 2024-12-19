@@ -45,7 +45,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
       date: new Date(),
       amount: 0,
       description: "",
-      transaction_type: 'expense',
+      transaction_type: "expense",
     },
   });
 
@@ -75,69 +75,69 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <div >
+      <div>
         <Controller
-            name="transaction_type"
-            control={control}
-            render={({ field }) => (
-              <Select
-                  labelId="transaction-type-label"
-                  className={styles.transactionTypeForm}
-                  {...field}
-                >
-                  <MenuItem value="expense">支出</MenuItem>
-                  <MenuItem value="income">収入</MenuItem>
-                </Select>
-            )}
-          />
+          name="transaction_type"
+          control={control}
+          render={({ field }) => (
+            <Select
+              labelId="transaction-type-label"
+              className={styles.transactionTypeForm}
+              {...field}
+            >
+              <MenuItem value="expense">支出</MenuItem>
+              <MenuItem value="income">収入</MenuItem>
+            </Select>
+          )}
+        />
         {errors.transaction_type && (
           <p style={{ color: "red" }}>{errors.transaction_type.message}</p>
         )}
-        </div>
-        <div className={styles.form}>
-          <Controller
-            name="amount"
-            control={control}
-            render={({ field }) => (
-              <InputField
-                {...field}
-                label="金額"
-                placeholder="金額を入力してください"
-              />
-            )}
-          />
-          {errors.amount && (
-            <p style={{ color: "red" }}>{errors.amount.message}</p>
+      </div>
+      <div className={styles.form}>
+        <Controller
+          name="amount"
+          control={control}
+          render={({ field }) => (
+            <InputField
+              {...field}
+              label="金額"
+              placeholder="金額を入力してください"
+            />
           )}
-          <Controller
-            name="date"
-            control={control}
-            render={({ field }) => (
-              <DatePicker
-                selected={field.value}
-                onChange={field.onChange}
-                placeholderText="日付を選択してください"
-                customInput={<InputField label="日付" placeholder="" />}
-                className={styles.form}
-              />
-            )}
-          />
-          {errors.date && <p style={{ color: "red" }}>{errors.date.message}</p>}
-          <Controller
-            name="description"
-            control={control}
-            render={({ field }) => (
-              <MultipleLineInputField
-                {...field}
-                label="内容"
-                placeholder="内容を入力してください"
-                rows={3}
-              />
-            )}
-          />
-          {errors.description && (
-            <p style={{ color: "red" }}>{errors.description.message}</p>
+        />
+        {errors.amount && (
+          <p style={{ color: "red" }}>{errors.amount.message}</p>
+        )}
+        <Controller
+          name="date"
+          control={control}
+          render={({ field }) => (
+            <DatePicker
+              selected={field.value}
+              onChange={field.onChange}
+              placeholderText="日付を選択してください"
+              customInput={<InputField label="日付" placeholder="" />}
+              className={styles.form}
+            />
           )}
+        />
+        {errors.date && <p style={{ color: "red" }}>{errors.date.message}</p>}
+        <Controller
+          name="description"
+          control={control}
+          render={({ field }) => (
+            <MultipleLineInputField
+              {...field}
+              label="内容"
+              placeholder="内容を入力してください"
+              rows={3}
+            />
+          )}
+        />
+        {errors.description && (
+          <p style={{ color: "red" }}>{errors.description.message}</p>
+        )}
       </div>
       <div className={styles.submitButton}>
         <SubmitButton label="登録" type="submit" />
