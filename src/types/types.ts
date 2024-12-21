@@ -5,11 +5,23 @@ export interface Transaction {
   description: string | null;
   userId: number;
   categoryId: number;
-  transaction_type: string;
+  transactionType: string;
 }
 
 export interface TransactionState {
   transactions: Transaction[];
+  status: "idle" | "loading" | "succeeded" | "failed";
+  error: string | null;
+}
+
+export interface Category {
+  id: number;
+  name: string;
+  userId: number;
+}
+
+export interface CategoryState {
+  categories: Category[];
   status: "idle" | "loading" | "succeeded" | "failed";
   error: string | null;
 }

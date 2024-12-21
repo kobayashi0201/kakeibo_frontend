@@ -1,24 +1,26 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useForm, Controller } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../features/store";
-import { fetchTransactions, createTransaction } from "../utils/api";
+import { fetchTransactions, createTransaction, fetchCategories } from "../utils/api";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { submitSchema } from "../validations/validationSchemas";
 import { formatDate } from "../utils/dateUtils";
 import { SubmitButton, InputField, MultipleLineInputField } from "./UI";
 import styles from "./TransactionForm.module.css";
-import { MenuItem, Select } from "@mui/material";
+import { MenuItem, Select, FormControl, InputLabel } from "@mui/material";
+import { Category } from "../types/types";
 
 type FormValues = {
   date: Date;
   amount: number;
   description?: string;
   transaction_type: string;
+  categoryId: number;
 };
 
 type TransactionFormProps = {
@@ -33,11 +35,13 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
   onSubmitSuccess,
 }) => {
   const dispatch = useDispatch<AppDispatch>();
-
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const {
     handleSubmit,
     reset,
     control,
+    setValue,
     formState: { errors },
   } = useForm<FormValues>({
     resolver: yupResolver(submitSchema),
@@ -46,8 +50,26 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
       amount: 0,
       description: "",
       transaction_type: "expense",
+      categoryId: 1,
     },
   });
+
+  useEffect(() => {
+    const fetch = async () => {
+      const fetchedCategories = await dispatch(fetchCategories());
+      setCategories(fetchedCategories.payload);
+      if (fetchedCategories.payload.length > 0) {
+        const initialCategoryId = fetchedCategories.payload[0].id;
+        setValue("categoryId", initialCategoryId);
+      }
+      setIsLoading(false);
+    }
+    fetch();
+  }, [dispatch, setValue]);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
   const onSubmit = async (data: FormValues) => {
     try {
@@ -57,7 +79,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
           date: formatDate(data.date),
           description: data.description,
           userId: 1,
-          categoryId: 1,
+          categoryId: data.categoryId,
           transaction_type: data.transaction_type,
         }),
       );
@@ -75,11 +97,11 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <div>
-        <Controller
-          name="transaction_type"
-          control={control}
-          render={({ field }) => (
+      <Controller
+        name="transaction_type"
+        control={control}
+        render={({ field }) => (
+          <FormControl variant="standard">
             <Select
               labelId="transaction-type-label"
               className={styles.transactionTypeForm}
@@ -88,27 +110,34 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
               <MenuItem value="expense">支出</MenuItem>
               <MenuItem value="income">収入</MenuItem>
             </Select>
-          )}
-        />
-        {errors.transaction_type && (
-          <p style={{ color: "red" }}>{errors.transaction_type.message}</p>
+          </FormControl>
         )}
-      </div>
+      />
+      {errors.transaction_type && (
+        <p style={{ color: "red" }}>{errors.transaction_type.message}</p>
+      )}
       <div className={styles.form}>
         <Controller
-          name="amount"
+          name="categoryId"
           control={control}
           render={({ field }) => (
-            <InputField
-              {...field}
-              label="金額"
-              placeholder="金額を入力してください"
-            />
+            <FormControl>
+              <InputLabel id="category-label">カテゴリー</InputLabel>
+              <Select
+                {...field}
+                labelId="category-label"
+                label="カテゴリー"
+                value={field.value ?? ""}
+              >
+                {categories.map((category: Category) => (
+                  <MenuItem key={category.id} value={category.id}>
+                    {category.name}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
           )}
         />
-        {errors.amount && (
-          <p style={{ color: "red" }}>{errors.amount.message}</p>
-        )}
         <Controller
           name="date"
           control={control}
@@ -123,6 +152,20 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
           )}
         />
         {errors.date && <p style={{ color: "red" }}>{errors.date.message}</p>}
+        <Controller
+          name="amount"
+          control={control}
+          render={({ field }) => (
+            <InputField
+              {...field}
+              label="金額"
+              placeholder="金額を入力してください"
+            />
+          )}
+        />
+        {errors.amount && (
+          <p style={{ color: "red" }}>{errors.amount.message}</p>
+        )}
         <Controller
           name="description"
           control={control}

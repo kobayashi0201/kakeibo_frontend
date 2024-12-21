@@ -3,8 +3,8 @@ import TransactionForm from "@/src/components/TransactionForm";
 import { SubmitButton, Modal, NotificationSnackbar } from "../../components/UI";
 import { useState, useEffect } from "react";
 import TransactionTableList from "@/src/components/TransactionTableList";
-import { fetchTransactions } from "@/src/utils/api";
-import { Transaction } from "@/src/types/types";
+import { fetchTransactions, fetchCategories } from "@/src/utils/api";
+import { Transaction, Category } from "@/src/types/types";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/src/features/store";
 
@@ -13,6 +13,7 @@ export default function Home() {
   const [snackbarStatus, setSnackbarStatus] = useState<"success" | "error">();
   const [snackbarAction, setSnackbarAction] = useState<"register" | "delete">();
   const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   const handleOpenModal = () => setOpenModal(true);
@@ -28,8 +29,10 @@ export default function Home() {
 
   useEffect(() => {
     const fetch = async () => {
-      const data = await dispatch(fetchTransactions());
-      setTransactions(data.payload);
+      const transactionData = await dispatch(fetchTransactions());
+      const categoryData = await dispatch(fetchCategories());
+      setTransactions(transactionData.payload);
+      setCategories(categoryData.payload);
     };
     fetch();
   }, [isSubmitted, dispatch]);
@@ -37,7 +40,8 @@ export default function Home() {
   return (
     <div>
       <TransactionTableList
-        data={transactions}
+        transactionData={transactions}
+        categoryData={categories}
         onDeleteSuccess={() => setIsSubmitted(!isSubmitted)}
         onNotify={(type: "success" | "error", action: "register" | "delete") =>
           handleSnackbar(type, action)
