@@ -6,7 +6,11 @@ import "react-datepicker/dist/react-datepicker.css";
 import { useForm, Controller } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../features/store";
-import { fetchTransactions, createTransaction, fetchCategories } from "../utils/api";
+import {
+  fetchTransactions,
+  createTransaction,
+  fetchCategories,
+} from "../utils/api";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { submitSchema } from "../validations/validationSchemas";
 import { formatDate } from "../utils/dateUtils";
@@ -63,7 +67,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({
         setValue("categoryId", initialCategoryId);
       }
       setIsLoading(false);
-    }
+    };
     fetch();
   }, [dispatch, setValue]);
 

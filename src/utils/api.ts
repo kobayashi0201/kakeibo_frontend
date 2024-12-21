@@ -91,7 +91,7 @@ export const fetchCategories = createAsyncThunk(
   "categories/fetchCategories",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await apiClient.get("/categories"); 
+      const response = await apiClient.get("/categories");
       return toCamelCase(response.data);
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -101,4 +101,3 @@ export const fetchCategories = createAsyncThunk(
     }
   },
 );
-

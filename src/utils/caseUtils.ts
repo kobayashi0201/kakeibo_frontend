@@ -18,7 +18,9 @@ export function toCamelCase<T extends Array<Record<string, unknown>>>(
     const camelCaseObj: Record<string, unknown> = {};
     for (const key in obj) {
       if (Object.prototype.hasOwnProperty.call(obj, key)) {
-        const camelCaseKey = key.replace(/_([a-z])/g, (g) => g[1].toUpperCase());
+        const camelCaseKey = key.replace(/_([a-z])/g, (g) =>
+          g[1].toUpperCase(),
+        );
         camelCaseObj[camelCaseKey] = obj[key];
       }
     }
