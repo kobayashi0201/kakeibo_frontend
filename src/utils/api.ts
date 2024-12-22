@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import { toSnakeCase } from "./caseUtils";
+import { toSnakeCase, toCamelCase } from "./caseUtils";
 
 const apiClient = axios.create({
   baseURL: "http://localhost:3000/api/v1",
@@ -14,7 +14,7 @@ export const fetchTransactions = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await apiClient.get("/transactions");
-      return response.data;
+      return toCamelCase(response.data);
     } catch (error) {
       if (axios.isAxiosError(error)) {
         return rejectWithValue(error.response?.data?.message);
@@ -78,6 +78,21 @@ export const destoryMultipleTransactions = createAsyncThunk(
         },
       );
       return response.data;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        return rejectWithValue(error.response?.data?.message);
+      }
+      return rejectWithValue("An unexpected error occurred");
+    }
+  },
+);
+
+export const fetchCategories = createAsyncThunk(
+  "categories/fetchCategories",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await apiClient.get("/categories");
+      return toCamelCase(response.data);
     } catch (error) {
       if (axios.isAxiosError(error)) {
         return rejectWithValue(error.response?.data?.message);

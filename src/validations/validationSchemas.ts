@@ -16,4 +16,5 @@ export const submitSchema = yup.object().shape({
   date: yup.date().required("日付を入力してください"),
   description: yup.string().optional(),
   transaction_type: yup.string().required("種類を選択してください"),
+  categoryId: yup.number().required("カテゴリを選択してください"),
 });

@@ -18,7 +18,7 @@ import {
 } from "@mui/material";
 import { alpha } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { Transaction } from "@/src/types/types";
+import { Transaction, Category } from "@/src/types/types";
 import { formatDate } from "@/src/utils/dateUtils";
 import { AppDispatch } from "@/src/features/store";
 import { useDispatch } from "react-redux";
@@ -33,6 +33,7 @@ interface RowData {
   amount: number;
   description: string | null;
   transaction_type: string;
+  category: string;
 }
 
 interface EnhancedTableToolbarProps {
@@ -43,7 +44,8 @@ interface EnhancedTableToolbarProps {
 }
 
 interface CustomTableProps {
-  data: Transaction[];
+  transactionData: Transaction[];
+  categoryData: Category[];
   onDeleteSuccess: () => void;
   onNotify: (type: "success" | "error", action: "register" | "delete") => void;
 }
@@ -120,7 +122,8 @@ const EnhancedTableToolbar: React.FC<EnhancedTableToolbarProps> = ({
 };
 
 const TransactionTableList: React.FC<CustomTableProps> = ({
-  data,
+  transactionData,
+  categoryData,
   onDeleteSuccess,
   onNotify,
 }) => {
@@ -166,12 +169,15 @@ const TransactionTableList: React.FC<CustomTableProps> = ({
     return stabilizedThis.map((el) => el[0]);
   };
 
-  const transformedData: RowData[] = data.map((transaction) => ({
+  const transformedData: RowData[] = transactionData.map((transaction) => ({
     id: transaction.id,
     date: formatDate(transaction.date),
     amount: transaction.amount,
     description: transaction.description,
-    transaction_type: transaction.transaction_type,
+    transaction_type: transaction.transactionType,
+    category: categoryData.find(
+      (category) => category.id === transaction.categoryId,
+    )?.name as string,
   }));
 
   const sortedData = sortedRowInformation(
@@ -226,6 +232,7 @@ const TransactionTableList: React.FC<CustomTableProps> = ({
                   日付
                 </TableSortLabel>
               </TableCell>
+              <TableCell style={{ fontWeight: "bold" }}>カテゴリー</TableCell>
               <TableCell style={{ fontWeight: "bold" }}>
                 <TableSortLabel
                   active={orderBy === "amount"}
@@ -257,6 +264,7 @@ const TransactionTableList: React.FC<CustomTableProps> = ({
                     <Checkbox color="primary" checked={isItemSelected} />
                   </TableCell>
                   <TableCell>{row.date}</TableCell>
+                  <TableCell>{row.category}</TableCell>
                   <TableCell>{row.amount}</TableCell>
                   <TableCell>{row.description}</TableCell>
                   <TableCell>
