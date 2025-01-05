@@ -1,5 +1,5 @@
 import React from "react";
-import { PieChart, Pie, Cell } from "recharts";
+import { ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
 import { CalculatedMonthlyTransaction, Category } from "@/src/types/types";
 import { formatDate } from "../utils/dateUtils";
 import { schemeCategory10 } from "d3-scale-chromatic";
@@ -35,23 +35,38 @@ const MyPieChart: React.FC<CustomPieChartProps> = ({
   );
 
   return (
-    <PieChart width={1000} height={400}>
-      <Pie
-        data={arrayData}
-        cx="50%"
-        cy="50%"
-        outerRadius={150}
-        fill="#8884d8"
-        dataKey="value"
-        label={({ name, value }) => `${name}: ${value}`}
-        startAngle={90}
-        endAngle={-270}
-      >
-        {arrayData.map((entry, index) => (
-          <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-        ))}
-      </Pie>
-    </PieChart>
+    <div style={{ width: "100%", height: "50vh" }}>
+      <ResponsiveContainer width="100%" height="100%">
+        <PieChart>
+          <Pie
+            data={arrayData}
+            cx="50%"
+            cy="50%"
+            outerRadius={150}
+            innerRadius={75}
+            fill="#8884d8"
+            dataKey="value"
+            label={({ name, value }) => `${name}: ${value}円`}
+            startAngle={90}
+            endAngle={-270}
+          >
+            {arrayData.map((entry, index) => (
+              <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+            ))}
+          </Pie>
+          <text
+            x="50%"
+            y="50%"
+            textAnchor="middle"
+            dominantBaseline="middle"
+            fontSize="20px"
+            fill="#000"
+          >
+            合計：{Math.round(data.total)}円
+          </text>
+        </PieChart>
+      </ResponsiveContainer>
+    </div>
   );
 };
 
