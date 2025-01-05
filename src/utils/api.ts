@@ -101,3 +101,19 @@ export const fetchCategories = createAsyncThunk(
     }
   },
 );
+
+export const fetchCalculatedMonthlyTransactions = createAsyncThunk(
+  "CalculatedMonthlyTransactions/fetchCalculatedMonthlyTransactions",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await apiClient.get("/calculated_monthly_transactions");
+      console.log("テスト2", response.data);
+      return toCamelCase(response.data);
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        return rejectWithValue(error.response?.data?.message);
+      }
+      return rejectWithValue("An unexpected error occurred");
+    }
+  },
+);
