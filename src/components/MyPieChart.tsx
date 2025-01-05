@@ -51,7 +51,10 @@ const MyPieChart: React.FC<CustomPieChartProps> = ({
             endAngle={-270}
           >
             {arrayData.map((entry, index) => (
-              <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+              <Cell
+                key={`cell-${index}`}
+                fill={COLORS[index % COLORS.length]}
+              />
             ))}
           </Pie>
           <text
