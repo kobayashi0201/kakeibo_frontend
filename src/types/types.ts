@@ -25,3 +25,19 @@ export interface CategoryState {
   status: "idle" | "loading" | "succeeded" | "failed";
   error: string | null;
 }
+
+export interface CalculatedMonthlyTransaction {
+  id: number;
+  month: Date;
+  total: number;
+  totalByCategory: { [key: string]: number };
+  percentageByCategory: { [key: string]: number };
+  transactionType: string;
+  userId: number;
+}
+
+export interface CalculatedMonthlyTransactionState {
+  calculatedMonthlyTransactions: CalculatedMonthlyTransaction[];
+  status: "idle" | "loading" | "succeeded" | "failed";
+  error: string | null;
+}

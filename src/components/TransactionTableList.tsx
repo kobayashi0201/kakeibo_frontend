@@ -107,7 +107,7 @@ const EnhancedTableToolbar: React.FC<EnhancedTableToolbarProps> = ({
           id="tableTitle"
           component="div"
         >
-          今月の収支
+          収支一覧
         </Typography>
       )}
       {selected.length > 0 ? (

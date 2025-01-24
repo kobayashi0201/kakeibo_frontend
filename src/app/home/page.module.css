@@ -1,0 +1,9 @@
+.title {
+  font-size: 20px;
+  font-weight: bold;
+  margin-top: 16px;
+}
+.toggleButton {
+  display: flex;
+  justify-content: center;
+}
